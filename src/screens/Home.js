@@ -156,19 +156,36 @@ const Home = (props) => {
             title="TOTAL CASES"
             bg="red"
             number={data[0] && data[0].number}
-            onPress={() => props.navigation.navigate("Detail")}
+            onPress={() =>
+              props.navigation.navigate("Detail", {
+                title: "CONFIRMED CASES",
+                status: "confirmed",
+              })
+            }
           />
           <Cards
             icon="ios-git-network"
             title="RECOVERED"
             bg="#FFF"
             number={data[1] && data[1].number}
+            onPress={() =>
+              props.navigation.navigate("Detail", {
+                title: "RECOVERED CASES",
+                status: "recovered",
+              })
+            }
           />
           <Cards
             icon="ios-heart-dislike"
             title="DEATH CASES"
             bg="#FFF"
             number={data[2] && data[2].number}
+            onPress={() =>
+              props.navigation.navigate("Detail", {
+                title: "DEATH CASES",
+                status: "deaths",
+              })
+            }
           />
         </ScrollView>
         <View style={{ marginBottom: 34, marginTop: 30 }}>

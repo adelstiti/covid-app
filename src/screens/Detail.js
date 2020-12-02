@@ -4,8 +4,11 @@ import { Ionicons } from "@expo/vector-icons";
 import Chart from "../components/Chart";
 import Map from "../components/Map";
 
-const Detail = (props) => {
+const Detail = ({ navigation, route }) => {
+  const { title, status } = route.params;
   const [map, setMap] = useState(false);
+  const [country, setCountry] = useState("spain");
+
   return (
     <View style={styles.page}>
       <View style={styles.headContainer}>
@@ -13,7 +16,7 @@ const Detail = (props) => {
           <Ionicons
             name="md-remove"
             size={26}
-            onPress={() => props.navigation.navigate("Home")}
+            onPress={() => navigation.navigate("Home")}
           />
           <Ionicons name="md-remove" size={26} style={styles.hum} />
         </View>
@@ -21,25 +24,42 @@ const Detail = (props) => {
           <Image source={require("../images/1.jpeg")} style={styles.profile} />
         </View>
       </View>
-      <View style={styles.optionCard}>
-        <View style={styles.optionCol}>
-          <Text onPress={() => setMap(false)} style={styles.textLinear}>
-            CURVE
-          </Text>
-        </View>
-        <Text onPress={() => setMap(true)} style={styles.textLogarthimic}>
-          MAP
-        </Text>
+
+      <View>
+        <Text style={styles.title}>{title}</Text>
       </View>
+
       <View style={styles.locationContainer}>
-        <Text style={styles.textGlobal}>GLOBAL</Text>
-        <Text style={styles.textTunisia}>TUNISIA</Text>
+        <Text style={styles.textGlobal} onPress={() => setCountry("france")}>
+          GLOBAL
+        </Text>
+        <Text style={styles.textTunisia} onPress={() => setCountry("tunisia")}>
+          TUNISIA
+        </Text>
         <View style={styles.reloadContainer}>
           <Ionicons name="md-refresh" size={24} color="red" />
         </View>
       </View>
+      <View style={styles.optionCard}>
+        <View style={map ? styles.optionMap : styles.optionCol}>
+          <Text
+            onPress={() => setMap(false)}
+            style={map ? styles.textLogarthimic : styles.textLinear}
+          >
+            CURVE
+          </Text>
+        </View>
+        <View style={map ? styles.optionCol : styles.optionMap}>
+          <Text
+            onPress={() => setMap(true)}
+            style={!map ? styles.textLogarthimic : styles.textLinear}
+          >
+            MAP
+          </Text>
+        </View>
+      </View>
 
-      {map ? <Map /> : <Chart />}
+      {map ? <Map country={country} status={status} /> : <Chart />}
 
       <View style={styles.bottomCard}>
         <View style={styles.bottomCol}>
@@ -63,6 +83,12 @@ const styles = StyleSheet.create({
   page: {
     backgroundColor: "#FFF",
     flex: 1,
+  },
+  title: {
+    fontWeight: "bold",
+    fontSize: 20,
+    margin: 15,
+    marginBottom: 20,
   },
   headContainer: {
     marginHorizontal: 20,
@@ -94,10 +120,16 @@ const styles = StyleSheet.create({
     backgroundColor: "#000",
     paddingVertical: 2,
     paddingHorizontal: 5,
+    marginHorizontal: 5,
+    borderRadius: 2,
+  },
+  optionMap: {
+    paddingVertical: 2,
+    paddingHorizontal: 5,
     borderRadius: 2,
   },
   textLinear: {
-    color: "#FFF",
+    color: "#fff",
     fontSize: 12,
     fontWeight: "bold",
   },
@@ -111,8 +143,8 @@ const styles = StyleSheet.create({
     alignSelf: "center",
     flexDirection: "row",
     paddingHorizontal: 30,
-    marginTop: 40,
     alignItems: "center",
+    marginBottom: 30,
   },
   textGlobal: {
     fontWeight: "bold",
