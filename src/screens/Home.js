@@ -1,10 +1,11 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
   Button,
   Image,
   ImageBackground,
   StyleSheet,
   Text,
+  TouchableOpacity,
   View,
 } from "react-native";
 import Ionicons from "@expo/vector-icons/Ionicons";
@@ -12,25 +13,51 @@ import { ScrollView } from "react-native-gesture-handler";
 import Deck from "../components/Deck";
 import Cards from "../components/Cards";
 import Buttons from "../components/Buttons";
+import Axios from "axios";
 
 const Home = (props) => {
-  const DATA = [
-    {
-      id: 1,
-      title: "CORONAVIRUS CASES",
-      number: "1 838 456",
-    },
-    {
-      id: 2,
-      title: "TOTAL DEATHS",
-      number: "1 298",
-    },
-    {
-      id: 3,
-      title: "RECOVERED",
-      number: "741 989",
-    },
-  ];
+  const [data, setData] = useState([]);
+  const [active, setActive] = useState("global");
+
+  const changeCases = (country) => {
+    let uri = `https://covid19.mathdro.id/api`;
+    setActive("global");
+
+    if (country) {
+      uri = `https://covid19.mathdro.id/api/countries/${country}`;
+      setActive(country);
+    }
+
+    Axios.get(uri).then((res) => {
+      setData([
+        {
+          id: 1,
+          title: "CORONAVIRUS CASES",
+          number: res.data.confirmed.value
+            .toString()
+            .replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1 "),
+        },
+        {
+          id: 2,
+          title: "TOTAL DEATHS",
+          number: res.data.deaths.value
+            .toString()
+            .replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1 "),
+        },
+        {
+          id: 3,
+          title: "RECOVERED",
+          number: res.data.recovered.value
+            .toString()
+            .replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1 "),
+        },
+      ]);
+    });
+  };
+
+  useEffect(() => {
+    changeCases();
+  }, []);
 
   const renderCard = (item) => {
     return (
@@ -46,7 +73,7 @@ const Home = (props) => {
             />
             <Text style={styles.number}>{item.number}</Text>
           </View>
-          <View style={{ marginLeft: 150 }}>
+          <View style={{ marginLeft: 130 }}>
             <Ionicons name="md-options" size={24} color="white" />
             <Text style={styles.textCovid}>COVID-19</Text>
           </View>
@@ -86,17 +113,36 @@ const Home = (props) => {
         </View>
         <Text style={styles.textDash}>CORONA DASH</Text>
         <View style={styles.colContainer}>
-          <Text style={styles.textGlobal}>GLOBAL</Text>
-          <Text style={styles.textTunisia}>TUNISIA</Text>
-          <View style={styles.reloadContainer}>
+          <Text
+            onPress={() => changeCases("")}
+            style={[
+              styles.textGlobal,
+              { color: active === "global" ? "red" : "#6a706e" },
+            ]}
+          >
+            GLOBAL
+          </Text>
+          <Text
+            onPress={() => changeCases("tunisia")}
+            style={[
+              styles.textTunisia,
+              { color: active === "tunisia" ? "red" : "#6a706e" },
+            ]}
+          >
+            TUNISIA
+          </Text>
+          <TouchableOpacity
+            style={styles.reloadContainer}
+            onPress={() => changeCases(active !== "global" ? active : "")}
+          >
             <Ionicons name="md-refresh" size={24} color="red" />
-          </View>
+          </TouchableOpacity>
         </View>
       </ImageBackground>
 
       <ScrollView showsVerticalScrollIndicator={false} vertical>
         <Deck
-          data={DATA}
+          data={data}
           renderCard={renderCard}
           renderNoMoreCards={renderNoMoreCards}
         />
@@ -109,20 +155,20 @@ const Home = (props) => {
             icon="md-pulse"
             title="TOTAL CASES"
             bg="red"
-            number="113 329"
+            number={data[0] && data[0].number}
             onPress={() => props.navigation.navigate("Detail")}
           />
           <Cards
             icon="ios-git-network"
             title="RECOVERED"
             bg="#FFF"
-            number="44 254"
+            number={data[1] && data[1].number}
           />
           <Cards
             icon="ios-heart-dislike"
             title="DEATH CASES"
             bg="#FFF"
-            number="99 329"
+            number={data[2] && data[2].number}
           />
         </ScrollView>
         <View style={{ marginBottom: 34, marginTop: 30 }}>
@@ -165,7 +211,7 @@ const styles = StyleSheet.create({
   },
   number: {
     color: "#FFF",
-    width: 100,
+    width: 120,
     fontSize: 22,
     fontWeight: "bold",
     marginTop: -10,
@@ -174,6 +220,7 @@ const styles = StyleSheet.create({
     transform: [{ rotate: "-90deg" }],
     color: "#3a4b4f",
     fontSize: 14,
+    marginTop: 18,
     width: 90,
     marginLeft: -35,
     fontWeight: "bold",
@@ -221,13 +268,11 @@ const styles = StyleSheet.create({
   textGlobal: {
     fontWeight: "bold",
     fontSize: 16,
-    color: "red",
   },
   textTunisia: {
     fontWeight: "bold",
     fontSize: 16,
     paddingHorizontal: 30,
-    color: "#6a706e",
   },
   reloadContainer: {
     backgroundColor: "#FFF",

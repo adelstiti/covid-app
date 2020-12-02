@@ -1,9 +1,11 @@
-import React from "react";
+import React, { useState } from "react";
 import { View, StyleSheet, Image, Text } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import Chart from "../components/Chart";
+import Map from "../components/Map";
 
 const Detail = (props) => {
+  const [map, setMap] = useState(false);
   return (
     <View style={styles.page}>
       <View style={styles.headContainer}>
@@ -21,9 +23,13 @@ const Detail = (props) => {
       </View>
       <View style={styles.optionCard}>
         <View style={styles.optionCol}>
-          <Text style={styles.textLinear}>LINEAR</Text>
+          <Text onPress={() => setMap(false)} style={styles.textLinear}>
+            CURVE
+          </Text>
         </View>
-        <Text style={styles.textLogarthimic}>LOGARTHIMIC</Text>
+        <Text onPress={() => setMap(true)} style={styles.textLogarthimic}>
+          MAP
+        </Text>
       </View>
       <View style={styles.locationContainer}>
         <Text style={styles.textGlobal}>GLOBAL</Text>
@@ -33,7 +39,7 @@ const Detail = (props) => {
         </View>
       </View>
 
-      <Chart />
+      {map ? <Map /> : <Chart />}
 
       <View style={styles.bottomCard}>
         <View style={styles.bottomCol}>
