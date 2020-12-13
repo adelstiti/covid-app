@@ -32,21 +32,21 @@ const Home = (props) => {
       setData([
         {
           id: 1,
-          title: "CORONAVIRUS CASES",
+          title: "TODAY CASES",
           number: res.data.confirmed.value
             .toString()
             .replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1 "),
         },
         {
           id: 2,
-          title: "TOTAL DEATHS",
+          title: "TODAY DEATHS",
           number: res.data.deaths.value
             .toString()
             .replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1 "),
         },
         {
           id: 3,
-          title: "RECOVERED",
+          title: "TODAY RECOVERED",
           number: res.data.recovered.value
             .toString()
             .replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1 "),
@@ -111,7 +111,7 @@ const Home = (props) => {
             <Image source={require("../images/1.jpeg")} style={styles.avatar} />
           </View>
         </View>
-        <Text style={styles.textDash}>CORONA DASH</Text>
+        <Text style={styles.textDash}>WHAT'S UP CORONA !</Text>
         <View style={styles.colContainer}>
           <Text
             onPress={() => changeCases("")}
@@ -189,8 +189,12 @@ const Home = (props) => {
           />
         </ScrollView>
         <View style={{ marginBottom: 34, marginTop: 30 }}>
-          <Buttons name="ASYMPTOMATIC" number="1 778" />
-          <Buttons name="ASYMPTOMATIC" number="1 561" />
+          <Buttons name="US" number="16,184,350" />
+          <Buttons name="India" number="9,857,029" />
+          <Buttons name="Brazil" number="6,880,127 " />
+          <Buttons name="Russia" number="2,629,699" />
+          <Buttons name="France" number="2,430,612" />
+          <Buttons name="United Kingdom" number="1,854,490" />
         </View>
       </ScrollView>
     </View>
