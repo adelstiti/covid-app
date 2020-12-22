@@ -1,8 +1,9 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { View, StyleSheet, Image, Text } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import Chart from "../components/Chart";
 import Map from "../components/Map";
+import axios from "axios";
 
 const Detail = ({ navigation, route }) => {
   const { title, status } = route.params;
@@ -30,10 +31,22 @@ const Detail = ({ navigation, route }) => {
       </View>
 
       <View style={styles.locationContainer}>
-        <Text style={styles.textGlobal} onPress={() => setCountry("france")}>
+        <Text
+          style={[
+            styles.textCountry,
+            country === "france" ? styles.textGlobal : styles.textTunisia,
+          ]}
+          onPress={() => setCountry("france")}
+        >
           GLOBAL
         </Text>
-        <Text style={styles.textTunisia} onPress={() => setCountry("tunisia")}>
+        <Text
+          style={[
+            styles.textCountry,
+            country === "tunisia" ? styles.textGlobal : styles.textTunisia,
+          ]}
+          onPress={() => setCountry("tunisia")}
+        >
           TUNISIA
         </Text>
         <View style={styles.reloadContainer}>
@@ -59,7 +72,11 @@ const Detail = ({ navigation, route }) => {
         </View>
       </View>
 
-      {map ? <Map country={country} status={status} /> : <Chart />}
+      {map ? (
+        <Map country={country} status={status} />
+      ) : (
+        <Chart country={country} status={status} />
+      )}
 
       <View style={styles.bottomCard}>
         <View style={styles.bottomCol}>
@@ -146,16 +163,16 @@ const styles = StyleSheet.create({
     alignItems: "center",
     marginBottom: 30,
   },
-  textGlobal: {
+  textCountry: {
+    paddingHorizontal: 10,
     fontWeight: "bold",
     fontSize: 16,
+  },
+  textGlobal: {
     color: "red",
   },
   textTunisia: {
-    fontWeight: "bold",
-    fontSize: 16,
     color: "#6a706e",
-    paddingHorizontal: 30,
   },
   reloadContainer: {
     backgroundColor: "#FFF",
