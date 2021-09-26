@@ -3,6 +3,7 @@ import {
   Button,
   Image,
   ImageBackground,
+  StatusBar,
   StyleSheet,
   Text,
   TouchableOpacity,
@@ -18,8 +19,12 @@ import Axios from "axios";
 const Home = (props) => {
   const [data, setData] = useState([]);
   const [active, setActive] = useState("global");
+  const [country, setCountry] = useState("");
+
 
   const changeCases = (country) => {
+    setCountry(country);
+    console.log(country);
     let uri = `https://covid19.mathdro.id/api`;
     setActive("global");
 
@@ -93,6 +98,7 @@ const Home = (props) => {
 
   return (
     <View style={styles.container}>
+      <StatusBar backgroundColor="transparent" translucent barStyle="light-content" />
       <ImageBackground
         source={require("../images/unnamed.jpg")}
         style={styles.map}
@@ -160,18 +166,7 @@ const Home = (props) => {
               props.navigation.navigate("Detail", {
                 title: "CONFIRMED CASES",
                 status: "confirmed",
-              })
-            }
-          />
-          <Cards
-            icon="ios-git-network"
-            title="RECOVERED"
-            bg="#FFF"
-            number={data[1] && data[1].number}
-            onPress={() =>
-              props.navigation.navigate("Detail", {
-                title: "RECOVERED CASES",
-                status: "recovered",
+                countr : country,
               })
             }
           />
@@ -179,11 +174,27 @@ const Home = (props) => {
             icon="ios-heart-dislike"
             title="DEATH CASES"
             bg="#FFF"
-            number={data[2] && data[2].number}
+            number={data[1] && data[1].number}
             onPress={() =>
               props.navigation.navigate("Detail", {
                 title: "DEATH CASES",
                 status: "deaths",
+                countr : country,
+
+              })
+            }
+          />
+          <Cards
+            icon="ios-git-network"
+            title="RECOVERED"
+            bg="#FFF"
+            number={data[2] && data[2].number}
+            onPress={() =>
+              props.navigation.navigate("Detail", {
+                title: "RECOVERED CASES",
+                status: "recovered",
+                countr : country,
+
               })
             }
           />
@@ -253,7 +264,7 @@ const styles = StyleSheet.create({
   },
   map: {
     height: 200,
-    paddingTop: 25,
+    paddingTop: 40,
     paddingHorizontal: 20,
     marginBottom: 15,
   },

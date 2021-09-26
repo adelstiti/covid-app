@@ -50,8 +50,6 @@ const Chart = ({ country }) => {
           height={320}
           yAxisSuffix="k"
           yAxisInterval={1}
-          yAxisSuffix="k"
-          yAxisInterval={1}
           chartConfig={{
             backgroundColor: "#FFF",
             backgroundGradientFrom: "#FFF",

@@ -5,10 +5,14 @@ import Chart from "../components/Chart";
 import Map from "../components/Map";
 import axios from "axios";
 
-const Detail = ({ navigation, route }) => {
-  const { title, status } = route.params;
+const Detail = ({ navigation, route}) => {
+  const { title, status,countr } = route.params;
   const [map, setMap] = useState(false);
-  const [country, setCountry] = useState("spain");
+  const [country, setCountry] = useState("");
+
+  useEffect(() => {
+    setCountry(countr);
+  }, [])
 
   return (
     <View style={styles.page}>
@@ -34,16 +38,16 @@ const Detail = ({ navigation, route }) => {
         <Text
           style={[
             styles.textCountry,
-            country === "france" ? styles.textGlobal : styles.textTunisia,
+            country === "" ? styles.textGlobal : styles.textRed,
           ]}
-          onPress={() => setCountry("france")}
+          onPress={() => setCountry("")}
         >
           GLOBAL
         </Text>
         <Text
           style={[
             styles.textCountry,
-            country === "tunisia" ? styles.textGlobal : styles.textTunisia,
+            country === "tunisia" ? styles.textGlobal : styles.textRed,
           ]}
           onPress={() => setCountry("tunisia")}
         >
@@ -59,7 +63,7 @@ const Detail = ({ navigation, route }) => {
             onPress={() => setMap(false)}
             style={map ? styles.textLogarthimic : styles.textLinear}
           >
-            CURVE
+            CURVE 
           </Text>
         </View>
         <View style={map ? styles.optionCol : styles.optionMap}>
@@ -171,7 +175,7 @@ const styles = StyleSheet.create({
   textGlobal: {
     color: "red",
   },
-  textTunisia: {
+  textRed: {
     color: "#6a706e",
   },
   reloadContainer: {

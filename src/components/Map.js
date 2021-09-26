@@ -8,7 +8,8 @@ const Map = ({ country, status }) => {
 
   const [data, setData] = useState([]);
   useEffect(() => {
-    let uri = `https://covid19.mathdro.id/api/countries/tunisia/confirmed`;
+    console.log(status);
+    let uri = `https://covid19.mathdro.id/api/countries/${status}`;
     // setActive("global");
     if (country) {
       uri = `https://covid19.mathdro.id/api/countries/${country}/${status}`;
